@@ -62,7 +62,6 @@ public class PlayerMovement : MonoBehaviour
 		moveState.LoadSubState(jumpState);
 		moveState.AddTransition(walkState, runState, MovementStateTriggers.Run);
 		moveState.AddTransition(runState, jumpState, MovementStateTriggers.Jump);
-		moveState.AddTransition(jumpState, runState, StateType.Run);
 		moveState.AddExitTransition(moveState, idleState);
 		
 		rootState.EnterStateMachine(this);

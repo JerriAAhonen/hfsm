@@ -14,7 +14,7 @@ public class InputManager : Singleton<InputManager>
 	private Action removeListeners;
 
 	public bool IsReady { get; private set; }
-	public bool HasMovementInput => InputManager.Instance.MovementInput.sqrMagnitude > Mathf.Epsilon;
+	public bool HasMovementInput => MovementInput.sqrMagnitude > Mathf.Epsilon;
 	public Vector2 MovementInput { get; private set; }
 	public Vector2 LookInput { get; private set; }
 
