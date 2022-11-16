@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 
-public class MovementStateTriggers
+public static class MovementStateTriggers
 {
-	public const int Walk = 1;
-	public const int Run = 2;
-	public const int Jump = 3;
+	public const int WalkToRun = 1;
+	public const int RunToWalk = 2;
+	public const int WalkToJump = 3;
+	public const int RunToJump = 4;
+	public const int JumpToWalk = 5;
+	public const int JumpToRun = 6;
 }
 
 public class PlayerMovement : MonoBehaviour
@@ -56,13 +59,18 @@ public class PlayerMovement : MonoBehaviour
 	{
 		rootState.LoadSubState(idleState);
 		rootState.LoadSubState(moveState);
+		rootState.AddExitTransition(moveState, idleState);
+		rootState.AddExitTransition(idleState, moveState);
 		
 		moveState.LoadSubState(walkState);
 		moveState.LoadSubState(runState);
 		moveState.LoadSubState(jumpState);
-		moveState.AddTransition(walkState, runState, MovementStateTriggers.Run);
-		moveState.AddTransition(runState, jumpState, MovementStateTriggers.Jump);
-		moveState.AddExitTransition(moveState, idleState);
+		moveState.AddTransition(walkState, runState, MovementStateTriggers.WalkToRun);
+		moveState.AddTransition(walkState, jumpState, MovementStateTriggers.WalkToJump);
+		moveState.AddTransition(runState, walkState, MovementStateTriggers.RunToWalk);
+		moveState.AddTransition(runState, jumpState, MovementStateTriggers.RunToJump);
+		moveState.AddTransition(jumpState, runState, MovementStateTriggers.JumpToRun);
+		moveState.AddTransition(jumpState, walkState, MovementStateTriggers.JumpToWalk);
 		
 		rootState.EnterStateMachine(this);
 	}
