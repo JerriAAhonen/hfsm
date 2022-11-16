@@ -1,32 +1,27 @@
 ﻿using UnityEngine;
 
-namespace Game.Shared
+public class JumpState : StateMachine
 {
-	public class JumpState : BaseState
+	private float groundCheckDelay;
+
+	protected override void OnEnter()
 	{
-		public JumpState(MovementStateMachine ctx) : base(ctx) { }
+		Debug.Log("Enter JumpState");
+		ctx.VerticalVel = Mathf.Sqrt(-2f * ctx.JumpHeight * ctx.Gravity);
+		groundCheckDelay = 0.1f;
+	}
 
-		public override void OnEnterState()
-		{
-			Debug.Log("Enter Jump");
-			ctx.VerticalVel = Mathf.Sqrt(-2f * ctx.JumpHeight * ctx.Gravity);
-		}
+	protected override bool OnUpdate()
+	{
+		//Debug.Log("Updating JumpState");
+		ctx.VerticalVel += ctx.Gravity * Time.deltaTime;
+		groundCheckDelay -= Time.deltaTime;
 
-		public override void OnExitState()
-		{
-			Debug.Log("Exit Jump");
-		}
+		return groundCheckDelay > 0 || !ctx.IsGrounded;
+	}
 
-		public override void OnUpdate()
-		{
-			ctx.VerticalVel += ctx.Gravity * Time.deltaTime;
-			CheckSwitchState();
-		}
-
-		private void CheckSwitchState()
-		{
-			if (ctx.IsGrounded)
-				ctx.SetCurrentState(States.Grounded);
-		}
+	protected override void OnExit()
+	{
+		Debug.Log("Exit JumpState");
 	}
 }

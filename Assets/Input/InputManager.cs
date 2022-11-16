@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class InputManager : Singleton<InputManager>
 {
-	private const bool IsSprintToggle = true;
+	private const bool IsRunToggle = true;
 	private const bool IsCrouchToggle = false;
 
 	private PlayerInputActions pia;
@@ -14,12 +14,13 @@ public class InputManager : Singleton<InputManager>
 	private Action removeListeners;
 
 	public bool IsReady { get; private set; }
+	public bool HasMovementInput => InputManager.Instance.MovementInput.sqrMagnitude > Mathf.Epsilon;
 	public Vector2 MovementInput { get; private set; }
 	public Vector2 LookInput { get; private set; }
 
 	public event Action Jump;
 	public event Action<bool, bool> Crouch;
-	public event Action<bool, bool> Sprint;
+	public event Action<bool, bool> Run;
 	public event Action<bool> Shoot;
 	public event Action<bool> Aim;
 	public event Action<bool> LeanRight;
@@ -69,9 +70,9 @@ public class InputManager : Singleton<InputManager>
 		pia.Player.Crouch.canceled += CrouchCancelled;
 		pia.Player.Crouch.Enable();
 
-		pia.Player.Sprint.performed += SprintPressed;
-		pia.Player.Sprint.canceled += SprintCancelled;
-		pia.Player.Sprint.Enable();
+		pia.Player.Run.performed += RunPressed;
+		pia.Player.Run.canceled += RunCancelled;
+		pia.Player.Run.Enable();
 
 		pia.Player.Shoot.performed += OnShootPerformed;
 		pia.Player.Shoot.canceled += OnShootCancelled;
@@ -102,8 +103,8 @@ public class InputManager : Singleton<InputManager>
 		void OnJumpPerformed(InputAction.CallbackContext _) => Jump?.Invoke();
 		void CrouchPressed(InputAction.CallbackContext _) => Crouch?.Invoke(true, IsCrouchToggle);
 		void CrouchCancelled(InputAction.CallbackContext _) => Crouch?.Invoke(false, IsCrouchToggle);
-		void SprintPressed(InputAction.CallbackContext _) => Sprint?.Invoke(true, IsSprintToggle);
-		void SprintCancelled(InputAction.CallbackContext _) => Sprint?.Invoke(false, IsSprintToggle);
+		void RunPressed(InputAction.CallbackContext _) => Run?.Invoke(true, IsRunToggle);
+		void RunCancelled(InputAction.CallbackContext _) => Run?.Invoke(false, IsRunToggle);
 		void OnShootPerformed(InputAction.CallbackContext _) => Shoot?.Invoke(true);
 		void OnShootCancelled(InputAction.CallbackContext _) => Shoot?.Invoke(false);
 		void OnAimPerformed(InputAction.CallbackContext _) => Aim?.Invoke(true);
@@ -121,8 +122,8 @@ public class InputManager : Singleton<InputManager>
 			pia.Player.Jump.performed -= OnJumpPerformed;
 			pia.Player.Crouch.performed -= CrouchPressed;
 			pia.Player.Crouch.canceled -= CrouchCancelled;
-			pia.Player.Sprint.performed -= SprintPressed;
-			pia.Player.Sprint.canceled -= SprintCancelled;
+			pia.Player.Run.performed -= RunPressed;
+			pia.Player.Run.canceled -= RunCancelled;
 			pia.Player.Shoot.performed -= OnShootPerformed;
 			pia.Player.Shoot.canceled -= OnShootCancelled;
 			pia.Player.Aim.performed -= OnAimPerformed;
@@ -146,7 +147,7 @@ public class InputManager : Singleton<InputManager>
 
 		pia.Player.Jump.Disable();
 		pia.Player.Crouch.Disable();
-		pia.Player.Sprint.Disable();
+		pia.Player.Run.Disable();
 		pia.Player.Shoot.Disable();
 		pia.Player.Aim.Disable();
 		pia.Player.Lean_Right.Disable();
