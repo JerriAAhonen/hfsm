@@ -237,7 +237,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 684953263}
-  - component: {fileID: 684953265}
   - component: {fileID: 684953264}
   - component: {fileID: 684953266}
   - component: {fileID: 684953267}
@@ -276,23 +275,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd1e0cf519c1fa439ba3b6a10c89751, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &684953265
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 684953262}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd9abab9592a16149bae371385ed548e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gravity: -30
-  groundedGravity: -0.05
-  jumpHeight: 1.5
-  walkSpeed: 3
-  runSpeed: 6
 --- !u!143 &684953266
 CharacterController:
   m_ObjectHideFlags: 0
@@ -328,12 +310,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 684953262}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0050022e1bc640809683df5652b2ddb7, type: 3}
+  m_Script: {fileID: 11500000, guid: 820d40902b5648feb793cd4833559545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: -30
-  groundedGravity: -0.05
-  jumpHeight: 1.5
+  _gravity: -30
+  _groundedGravity: -0.05
+  _jumpHeight: 1.5
+  _walkSpeed: 3
+  _runSpeed: 6
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
