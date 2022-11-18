@@ -15,6 +15,7 @@ namespace FiniteStateMachine
 		{
 			Debug.Log("Enter idle");
 			ctx.VerticalVel = ctx.GroundedGravity;
+			ctx.SetHorizontalVelocity(Vector2.zero);
 			
 			// Reset context
 			ctx.Running = false;

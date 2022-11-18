@@ -20,10 +20,12 @@ namespace FiniteStateMachine
 		[SerializeField] private float _runSpeed = 6f;
 		[Header("Crouch")] 
 		[SerializeField] private float _crouchSpeed = 1.5f;
+		[Header("Lean")]
+		[SerializeField] private LeanSystem leanSystem;
 		
 		// States
 		private readonly Dictionary<StateType, StateBase> states = new();
-		private StateBase currentState;
+		private (StateType type, StateBase state) currentState;
 
 		private CharacterController _cc;
 		private Vector3 _horizontalVel;
@@ -57,6 +59,7 @@ namespace FiniteStateMachine
 		public bool JumpRequested { get; set; }
 		public bool CrouchRequested { get; set; }
 		public bool Crouching { get; set; }
+		public bool IsLeaning => LeanRight || LeanLeft;
 		public bool LeanRight { get; private set; }
 		public bool LeanLeft { get; private set; }
 
@@ -70,8 +73,8 @@ namespace FiniteStateMachine
 			states.Add(StateType.Run, new State_Run(this));
 			states.Add(StateType.Idle, new State_Idle(this));
 			
-			currentState = states[StateType.Idle];
-			currentState.OnEnter();
+			currentState = (StateType.Idle, states[StateType.Idle]);
+			currentState.state.OnEnter();
 		}
 
 		private void Start()
@@ -79,15 +82,14 @@ namespace FiniteStateMachine
 			InputManager.Instance.Run += OnRun;
 			InputManager.Instance.Crouch += OnCrouch;
 			InputManager.Instance.Jump += OnJump;
-			InputManager.Instance.LeanRight += OnLeanRight;
-			InputManager.Instance.LeanLeft += OnLeanLeft;
+			InputManager.Instance.Lean += OnLean;
 		}
 
 		private void Update()
 		{
 			RefreshGrounded();
 			
-			if (!currentState.OnUpdate())
+			if (!currentState.state.OnUpdate())
 				SwitchState();
 				
 			var horizontalVel = _horizontalVel.x * transform.right + _horizontalVel.z * transform.forward;
@@ -107,13 +109,10 @@ namespace FiniteStateMachine
 
 		private void OnCrouch(bool pressed, bool isToggle)
 		{
-			Debug.Log("A");
 			if (!IsGrounded) return;
-			Debug.Log("B");
 			
 			if (!isToggle)
 			{
-				Debug.Log($"Crouching: {pressed}");
 				Crouching = pressed;
 				CrouchRequested = pressed;
 				SwitchState();
@@ -121,7 +120,6 @@ namespace FiniteStateMachine
 			}
 			else if (pressed)
 			{
-				Debug.Log("C");
 				Crouching = !Crouching;
 				CrouchRequested = Crouching;
 				SwitchState();
@@ -149,29 +147,28 @@ namespace FiniteStateMachine
 			}
 		}
 
-		private void OnLeanRight(bool lean)
+		private void OnLean(bool lean, bool right)
 		{
+			if (lean && currentState.type is StateType.Run or StateType.Jump)
+				return;
+			
 			LeanRight = lean;
-		}
-		
-		private void OnLeanLeft(bool lean)
-		{
-			LeanLeft = lean;
+			leanSystem.OnLean(lean, right);
 		}
 
 		#endregion
 		
 		private void SwitchState()
 		{
-			foreach (var (_, state) in states)
+			foreach (var (type, state) in states)
 			{
-				if (currentState == state)
+				if (currentState.type == type)
 					continue;
 
 				if (state.CanEnter())
 				{
-					currentState = state;
-					currentState.OnEnter();
+					currentState = (type, state);
+					currentState.state.OnEnter();
 					return;
 				}
 			}

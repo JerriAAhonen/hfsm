@@ -23,8 +23,7 @@ public class InputManager : Singleton<InputManager>
 	public event Action<bool, bool> Run;
 	public event Action<bool> Shoot;
 	public event Action<bool> Aim;
-	public event Action<bool> LeanRight;
-	public event Action<bool> LeanLeft;
+	public event Action<bool, bool> Lean;
 	public event Action Reload;
 	public event Action SwitchWeapon;
 
@@ -108,10 +107,10 @@ public class InputManager : Singleton<InputManager>
 		void OnShootPerformed(InputAction.CallbackContext _) => Shoot?.Invoke(true);
 		void OnShootCancelled(InputAction.CallbackContext _) => Shoot?.Invoke(false);
 		void OnAimPerformed(InputAction.CallbackContext _) => Aim?.Invoke(true);
-		void OnLeanRightPerformed(InputAction.CallbackContext _) => LeanRight?.Invoke(true);
-		void OnLeanRightCancelled(InputAction.CallbackContext _) => LeanRight?.Invoke(false);
-		void OnLeanLeftPerformed(InputAction.CallbackContext _) => LeanLeft?.Invoke(true);
-		void OnLeanLeftCancelled(InputAction.CallbackContext _) => LeanLeft?.Invoke(false);
+		void OnLeanRightPerformed(InputAction.CallbackContext _) => Lean?.Invoke(true, true);
+		void OnLeanRightCancelled(InputAction.CallbackContext _) => Lean?.Invoke(false, true);
+		void OnLeanLeftPerformed(InputAction.CallbackContext _) => Lean?.Invoke(true, false);
+		void OnLeanLeftCancelled(InputAction.CallbackContext _) => Lean?.Invoke(false, false);
 		void OnAimCancelled(InputAction.CallbackContext _) => Aim?.Invoke(false);
 		void OnReloadPerformed(InputAction.CallbackContext _) => Reload?.Invoke();
 		void OnPrimaryWeaponPerformed(InputAction.CallbackContext _) => SwitchWeapon?.Invoke();
