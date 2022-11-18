@@ -19,12 +19,9 @@ namespace HierarchicalSM
 		public const int RunToJump = 5;
 		public const int RunToCrouch = 6;
 		public const int JumpToWalk = 7;
-
 		public const int JumpToRun = 8;
-
 		//public const int JumpToCrouch = 9;
 		public const int CrouchToWalk = 10;
-
 		public const int CrouchToRun = 11;
 		//public const int CrouchToJump = 12;
 	}

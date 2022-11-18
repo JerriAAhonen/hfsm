@@ -2,9 +2,9 @@
 
 namespace FiniteStateMachine
 {
-	public class WalkState : StateBase
+	public class State_Walk : StateBase
 	{
-		public WalkState(PlayerMovement ctx) : base(ctx) { }
+		public State_Walk(PlayerMovement ctx) : base(ctx) { }
 		
 		public override bool CanEnter()
 		{

@@ -2,9 +2,9 @@
 
 namespace FiniteStateMachine
 {
-	public class IdleState : StateBase
+	public class State_Idle : StateBase
 	{
-		public IdleState(PlayerMovement ctx) : base(ctx) { }
+		public State_Idle(PlayerMovement ctx) : base(ctx) { }
 		
 		public override bool CanEnter()
 		{
@@ -14,6 +14,10 @@ namespace FiniteStateMachine
 		public override void OnEnter()
 		{
 			Debug.Log("Enter idle");
+			ctx.VerticalVel = ctx.GroundedGravity;
+			
+			// Reset context
+			ctx.Running = false;
 		}
 
 		public override bool OnUpdate()

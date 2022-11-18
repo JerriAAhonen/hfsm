@@ -2,9 +2,9 @@
 
 namespace FiniteStateMachine
 {
-	public class RunState : StateBase
+	public class State_Run : StateBase
 	{
-		public RunState(PlayerMovement context) : base(context) { }
+		public State_Run(PlayerMovement context) : base(context) { }
 
 		public override bool CanEnter()
 		{
@@ -20,7 +20,7 @@ namespace FiniteStateMachine
 		{
 			ctx.SetHorizontalVelocity(InputManager.Instance.MovementInput * ctx.RunSpeed);
 			
-			bool doContinue = InputManager.Instance.HasMovementInput && ctx.RunRequested;
+			bool doContinue = InputManager.Instance.HasMovementInput;
 			if (!doContinue) Debug.Log("Exit Run");
 			return doContinue;
 		}
